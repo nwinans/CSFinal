@@ -1,6 +1,8 @@
 import java.io.Serializable;
 public class User implements Serializable {
 
+   private final int MAX_LIVES = 5;
+
    private String player1;
    private String player2;
    
@@ -14,6 +16,7 @@ public class User implements Serializable {
       player2 = p2;
       totalScore = 0;
       level = 1;
+      lives = MAX_LIVES;
    }
    
    public int getLevel() {
@@ -23,7 +26,22 @@ public class User implements Serializable {
    public void nextLevel() {
       level++;
    }
-  
+   
+   public int getLives() {
+      return lives;
+   }
+   
+   public void loseLife() {
+      lives--;
+   }
+
+   public int getScore() {
+      return totalScore;
+   }
+   
+   public void setScore(int score) {
+      totalScore = score;
+   }
 }
 
 /*to save

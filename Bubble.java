@@ -4,9 +4,10 @@ import  java.awt.Color;
 import  java.awt.Graphics;
 
 public class Bubble extends JComponent{
-   private final int HORIZONTAL_MULTIPLIER = 3;
-   private final int VERTICAL_MULTIPLIER = 2;
+   private final int HORIZONTAL_MULTIPLIER = 2;
+   private final int VERTICAL_MULTIPLIER = 1;
    private final int HEIGHT_MULTIPLIER = 3;
+   private final int MAX_SPEED = 5;
 
    private int xDirection = 1;
    private int yDirection = 1;
@@ -47,11 +48,11 @@ public class Bubble extends JComponent{
    }
    
    public int getHorizontalSpeed() {
-      return size * HORIZONTAL_MULTIPLIER * xDirection;
+      return (MAX_SPEED - size) * HORIZONTAL_MULTIPLIER * xDirection;
    }
    
    public int getVerticalSpeed() {
-      return size * VERTICAL_MULTIPLIER * yDirection;
+      return (MAX_SPEED - size) * VERTICAL_MULTIPLIER * yDirection;
    }
    
    public int getMaxHeight() {

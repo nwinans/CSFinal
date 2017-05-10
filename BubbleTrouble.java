@@ -24,7 +24,7 @@ public class BubbleTrouble {
          public void actionPerformed(ActionEvent ev) {
             try {
                ObjectInputStream in = new ObjectInputStream(new FileInputStream("save.dat"));
-               User user = new User("Nic", "Drew");//(User) in.readObject();
+               User user = new User("Nick", "Drew");//(User) in.readObject();
                in.close();
                mainFrame.dispose();
                World world = new World(user);

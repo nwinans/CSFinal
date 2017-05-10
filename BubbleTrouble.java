@@ -4,7 +4,7 @@ import java.awt.event.*;
 
 import java.io.*;
 
-public class BubbleTrouble extends JFrame {
+public class BubbleTrouble {
    private JButton btnStart;
    
    public BubbleTrouble() {
@@ -20,6 +20,19 @@ public class BubbleTrouble extends JFrame {
       
       JButton startNewBtn = new JButton("Start New Game");
       JButton continueBtn = new JButton("Continue Game");
+      continueBtn.addActionListener(new ActionListener() {
+         public void actionPerformed(ActionEvent ev) {
+            try {
+               ObjectInputStream in = new ObjectInputStream(new FileInputStream("save.dat"));
+               User user = new User("Nic", "Drew");//(User) in.readObject();
+               in.close();
+               mainFrame.dispose();
+               World world = new World(user);
+            } catch (Exception e) {
+               e.printStackTrace();
+            }
+         }
+      });
             
       centerPanel.add(startNewBtn, "East");
       centerPanel.add(continueBtn, "West");
@@ -41,6 +54,6 @@ public class BubbleTrouble extends JFrame {
       
       mainFrame.setSize(400, 300);
       mainFrame.setVisible(true);
-      mainFrame.setDefaultCloseOperation(EXIT_ON_CLOSE);
+      mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 }

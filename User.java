@@ -13,7 +13,7 @@ public class User implements Serializable {
       player1 = p1;
       player2 = p2;
       totalScore = 0;
-      level = 0;
+      level = 1;
    }
    
    public int getLevel() {

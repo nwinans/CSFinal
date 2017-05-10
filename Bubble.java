@@ -4,6 +4,13 @@ import  java.awt.Color;
 import  java.awt.Graphics;
 
 public class Bubble extends JComponent{
+   private final int HORIZONTAL_MULTIPLIER = 3;
+   private final int VERTICAL_MULTIPLIER = 2;
+   private final int HEIGHT_MULTIPLIER = 3;
+
+   private int xDirection = 1;
+   private int yDirection = 1;
+
    private Color color;
    private int size;
    
@@ -30,11 +37,56 @@ public class Bubble extends JComponent{
       x = 0;
       y = 0;
    }
+      
+   public int getWH() {
+      return size * 20;
+   }
    
-   @Override
-   public void paintComponent(Graphics g) {
-      super.paintComponent(g);
-      g.setColor(color);
-      g.fillOval(x, y, size * 20, size * 20);
+   public Color getColor() {
+      return color;
+   }
+   
+   public int getHorizontalSpeed() {
+      return size * HORIZONTAL_MULTIPLIER * xDirection;
+   }
+   
+   public int getVerticalSpeed() {
+      return size * VERTICAL_MULTIPLIER * yDirection;
+   }
+   
+   public int getMaxHeight() {
+      return size * HEIGHT_MULTIPLIER;
+   }
+   
+   public int getX() {
+      return x;
+   }
+   
+   public int getY() {
+      return y;
+   }
+   
+   public void setY(int y2) {
+      y = y2;
+   }
+   
+   public void setX(int x2) { 
+     x = x2;
+   }
+   
+   public int getXDirection() {
+      return xDirection;
+   }
+   
+   public void flipXDirection() {
+      xDirection *= -1;
+   }
+   
+   public int getYDirection() {
+      return yDirection;
+   }
+   
+   public void flipYDirection() {
+      yDirection *= -1;
    }
 }  

@@ -7,7 +7,7 @@ public class Bubble extends JComponent{
    private final int HORIZONTAL_MULTIPLIER = 2;
    private final int VERTICAL_MULTIPLIER = 1;
    private final int HEIGHT_MULTIPLIER = 3;
-   private final int MAX_SPEED = 5;
+   private final int MAX_SPEED = 6;
 
    private int xDirection = 1;
    private int yDirection = 1;
@@ -20,8 +20,8 @@ public class Bubble extends JComponent{
    
    public Bubble(int s) {
       size = s;
-      x = 0;
-      y = 0;
+      x = (int) (Math.random() * 1000.0);
+      y = (int) (Math.random() * 800.0);
       Random rand = new Random();
       
       float r = rand.nextFloat();
@@ -48,11 +48,11 @@ public class Bubble extends JComponent{
    }
    
    public int getHorizontalSpeed() {
-      return (MAX_SPEED - size) * HORIZONTAL_MULTIPLIER * xDirection;
+      return (MAX_SPEED - size) / 2 * HORIZONTAL_MULTIPLIER * xDirection;
    }
    
    public int getVerticalSpeed() {
-      return (MAX_SPEED - size) * VERTICAL_MULTIPLIER * yDirection;
+      return (MAX_SPEED - size) / 2 * VERTICAL_MULTIPLIER * yDirection;
    }
    
    public int getMaxHeight() {

@@ -3,7 +3,7 @@ import  javax.swing.JComponent;
 import  java.awt.Color;
 import  java.awt.Graphics;
 
-public class Bubble extends JComponent{
+public class Bubble implements Item{ 
    private final int HORIZONTAL_MULTIPLIER = 2;
    private final int VERTICAL_MULTIPLIER = 1;
    private final int HEIGHT_MULTIPLIER = 3;
@@ -30,6 +30,22 @@ public class Bubble extends JComponent{
       
       color = new Color(r,g,b);
    }
+	
+	public Bubble(int s, int xCor, int yCor, int xDir, int yDir) {
+		size = x;
+		x = xCor;
+		y = yCor;
+		xDirection = xDir;
+		yDirection = yDir;
+		Random rand = new Random();
+      
+      float r = rand.nextFloat();
+      float g = rand.nextFloat();
+      float b = rand.nextFloat();
+      
+      color = new Color(r,g,b);
+	}
+		
    
    public Bubble(int s, Color c) {
       size = s;
@@ -90,4 +106,12 @@ public class Bubble extends JComponent{
    public void flipYDirection() {
       yDirection *= -1;
    }
+	
+	public int getWidth() {
+		return getWH();
+	}
+	
+	public int getHeight() {
+		return getWH();
+	}
 }  

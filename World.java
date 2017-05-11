@@ -10,6 +10,8 @@ public class World extends JPanel{
    private User usr;
    private JFrame frame;
    private ArrayList<Bubble> bbls;
+	
+	private Player player;
    
    public World(User user) {
       usr = user;
@@ -22,9 +24,30 @@ public class World extends JPanel{
                
       bbls = new ArrayList<Bubble>(4);
       
+		player = new Player();
+		
+		frame.addKeyListener(new KeyListener() {
+			public void keyTyped(KeyEvent e) {
+			}
+	
+			public void keyPressed(KeyEvent e) {
+				int code = e.getKeyCode();
+				if (code == KeyEvent.VK_LEFT)
+					if (player.getX() > 0)
+						player.moveLeft();
+				if (code == KeyEvent.VK_RIGHT)
+					if (player.getX() + player.getWidth() < frame.getWidth())
+						player.moveRight();
+				repaint();
+			}
+	
+			public void keyReleased(KeyEvent e) {
+			}
+		});
+				
       for (int i = 1; i < 5; i++) {
          Bubble bbl = new Bubble(i);
-         bbls.add(bbl);
+         //bbls.add(bbl);
       }
       
       Timer tmr = new Timer(10, new ActionListener() {
@@ -42,8 +65,15 @@ public class World extends JPanel{
                   if (bubble1.getBounds2D().intersects(bubble2.getBounds2D())){
                      if (Math.min(Math.abs((bbl.getX() + bbl.getWH()) - (b.getX())), Math.abs((bbl.getX()) - (b.getX() + b.getWH()))) < Math.min(Math.abs((bbl.getY() + bbl.getWH()) - (b.getY())), Math.abs((bbl.getY()) - (b.getY() + b.getWH())))) {
                         //x collision
-                        bbl.flipXDirection();
-                        b.flipXDirection();
+                        //bbl.flipXDirection();
+								if (b.getWH() / 20 - 1 != 0) {
+									Bubble bb1 = new Bubble((b.getWH() / 20) - 1);
+									Bubble bb2 = new Bubble((b.getWH() / 20) - 1);
+									bbls.add(bb1);
+									bbls.add(bb2);
+								}
+								bbls.remove(j);
+                        //b.flipXDirection();
                      } else {
                         //y collision
                         bbl.flipYDirection();
@@ -69,6 +99,9 @@ public class World extends JPanel{
          g.setColor(bbl.getColor());
          g.fillOval(bbl.getX(), bbl.getY(), bbl.getWH(), bbl.getWH());
       }
+		g.setColor(Color.red);
+		g.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+		System.out.println(player.getX()+ " " + player.getY() + " " + player.getWidth() + " " + player.getHeight());
    }
 }
  

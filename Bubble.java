@@ -3,7 +3,7 @@ import  javax.swing.JComponent;
 import  java.awt.Color;
 import  java.awt.Graphics;
 
-public class Bubble implements Item{ 
+public class Bubble extends Item{ 
    private final int HORIZONTAL_MULTIPLIER = 2;
    private final int VERTICAL_MULTIPLIER = 1;
    private final int HEIGHT_MULTIPLIER = 3;
@@ -13,15 +13,10 @@ public class Bubble implements Item{
    private int yDirection = 1;
 
    private Color color;
-   private int size;
-   
-   private int x;
-   private int y;
-   
+      
    public Bubble(int s) {
-      size = s;
-      x = (int) (Math.random() * 1000.0);
-      y = (int) (Math.random() * 800.0);
+		super ((int) (Math.random() * 1000.0), (int) (Math.random() * 600.0), s * 20, s * 20);
+
       Random rand = new Random();
       
       float r = rand.nextFloat();
@@ -32,9 +27,8 @@ public class Bubble implements Item{
    }
 	
 	public Bubble(int s, int xCor, int yCor, int xDir, int yDir) {
-		size = x;
-		x = xCor;
-		y = yCor;
+		super(xCor, yCor, s * 20, s * 20);
+		
 		xDirection = xDir;
 		yDirection = yDir;
 		Random rand = new Random();
@@ -48,15 +42,12 @@ public class Bubble implements Item{
 		
    
    public Bubble(int s, Color c) {
-      size = s;
+      super ((int) (Math.random() * 1000.0), (int) (Math.random() * 800.0), s * 20, s * 20);
       color = c;
-      
-      x = 0;
-      y = 0;
    }
       
    public int getWH() {
-      return size * 20;
+      return getHeight();
    }
    
    public Color getColor() {
@@ -64,33 +55,17 @@ public class Bubble implements Item{
    }
    
    public int getHorizontalSpeed() {
-      return (MAX_SPEED - size) / 2 * HORIZONTAL_MULTIPLIER * xDirection;
+      return (MAX_SPEED - (getWidth() / 20)) / 2 * HORIZONTAL_MULTIPLIER * xDirection;
    }
    
    public int getVerticalSpeed() {
-      return (MAX_SPEED - size) / 2 * VERTICAL_MULTIPLIER * yDirection;
+      return (MAX_SPEED - (getWidth() / 20)) / 2 * VERTICAL_MULTIPLIER * yDirection;
    }
    
    public int getMaxHeight() {
-      return size * HEIGHT_MULTIPLIER;
+      return getHeight() / 20 * HEIGHT_MULTIPLIER;
    }
-   
-   public int getX() {
-      return x;
-   }
-   
-   public int getY() {
-      return y;
-   }
-   
-   public void setY(int y2) {
-      y = y2;
-   }
-   
-   public void setX(int x2) { 
-     x = x2;
-   }
-   
+      
    public int getXDirection() {
       return xDirection;
    }
@@ -106,12 +81,4 @@ public class Bubble implements Item{
    public void flipYDirection() {
       yDirection *= -1;
    }
-	
-	public int getWidth() {
-		return getWH();
-	}
-	
-	public int getHeight() {
-		return getWH();
-	}
 }  

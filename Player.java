@@ -20,7 +20,7 @@ public class Player extends Item {
 	}
 	
 	public void shoot() {
-		timeToShoot = 100;
+		timeToShoot = 50;
 	}
 	
 	public void moveRight() {

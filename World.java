@@ -40,9 +40,10 @@ public class World extends JPanel{
 					if (player.getX() + player.getWidth() < frame.getWidth())
 						player.moveRight();
 				if (code == KeyEvent.VK_UP)
-					if (player.canShoot())
+					if (player.canShoot()) {
 						rope = new Rope((player.getX() * 2 + player.getWidth() - 10) / 2, player.getY() - 20);
-						//System.out.println((player.getX() * 2 + player.getWidth()) / 2);
+                  player.shoot();
+               }
 				repaint();
 			}
 	
@@ -97,6 +98,7 @@ public class World extends JPanel{
 		
 		Timer ropeTimer = new Timer(20, new ActionListener() {
          public void actionPerformed(ActionEvent e) {
+            player.cooldown();
 				if (rope != null)
 					if (rope.getY() < 0) 
 						rope = null;
@@ -114,7 +116,6 @@ public class World extends JPanel{
 								}
                      if (Math.min(Math.abs((rope.getX() + rope.getWidth()) - (b.getX())), Math.abs((rope.getX()) - (b.getX() + b.getWH()))) < Math.min(Math.abs((rope.getY() + rope.getHeight()) - (b.getY())), Math.abs((rope.getY()) - (b.getY() + b.getWH())))) {
                         //x collision
-                        //bbl.flipXDirection();
 								if (b.getWH() / 20 - 1 != 0) {
 									Bubble bb1 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), b.getXDirection(), -b.getYDirection());
 									Bubble bb2 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), b.getXDirection(), b.getYDirection());
@@ -125,11 +126,8 @@ public class World extends JPanel{
 									break;
 								}
 								
-                        //b.flipXDirection();
                      	} else {
                         //y collision
-                        //bbl.flipYDirection();
-                        //b.flipYDirection();  
 									if (b.getWH() / 20 - 1 != 0) {
 										Bubble bb1 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), b.getXDirection(), -Math.abs(b.getYDirection()));
 										Bubble bb2 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), -Math.abs(b.getYDirection()));
@@ -142,7 +140,6 @@ public class World extends JPanel{
                     		}
 								
                   }
-               //}//*/
 					}
 			}
 			repaint();
@@ -156,12 +153,18 @@ public class World extends JPanel{
    
    public void paintComponent(Graphics g) {
       super.paintComponent(g);
+      
+      //paint bubbles
       for (Bubble bbl : bbls) {
          g.setColor(bbl.getColor());
          g.fillOval(bbl.getX(), bbl.getY(), bbl.getWH(), bbl.getWH());
       }
+      
+      //paint player
 		g.setColor(Color.red);
 		g.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+      
+      //paint rope if shot
 		if (rope != null) {
 			g.setColor(Color.blue);
 			g.fillRect(rope.getX(), rope.getY(), rope.getWidth(), rope.getHeight());

@@ -4,6 +4,8 @@ import java.awt.event.*;
 import java.awt.geom.Ellipse2D;
 import java.util.TimerTask;
 import java.util.ArrayList;
+import java.io.ObjectOutputStream;
+import java.io.FileOutputStream;
 
 public class World extends JPanel{
 
@@ -124,6 +126,7 @@ public class World extends JPanel{
 								if (b.getWH() / 20 - 1 == 0) {
 									rope = null;
 									bbls.remove(j);
+                           if (bbls.size() == 0) save();
                            usr.setScore(usr.getScore() + 4);
                            frame.setTitle(usr.getScore() + "");
 									break;
@@ -187,5 +190,20 @@ public class World extends JPanel{
 			g.fillRect(rope.getX(), rope.getY(), rope.getWidth(), rope.getHeight());
 		}
    }
+   
+   public void save() {
+      try { 
+         usr.nextLevel();
+         
+         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("save.dat"));
+   	   out.writeObject(usr);
+   	   out.flush();
+   	   out.close();
+         
+         System.out.println("Save successfull...");
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+   }  
 }
  

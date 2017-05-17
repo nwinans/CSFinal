@@ -64,7 +64,19 @@ public class World extends JPanel{
                   bbl.flipXDirection();
                if (bbl.getY() + bbl.getWH() > getHeight() || bbl.getY() < 0)
                   bbl.flipYDirection();
-               //Ellipse2D.Double bubble1 = new Ellipse2D.Double(bbl.getX(), bbl.getY(), bbl.getWH(), bbl.getWH());
+               Ellipse2D.Double bubble1 = new Ellipse2D.Double(bbl.getX(), bbl.getY(), bbl.getWH(), bbl.getWH());
+               Rectangle p1 = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+               if (bubble1.getBounds2D().intersects(p1.getBounds2D())) {
+                  usr.loseLife();
+                  if (usr.getLives() == 0) {
+                     bbls.removeAll(bbls);
+                  }
+                  if (Math.min(Math.abs((bbl.getX() + bbl.getWH()) - (player.getX())), Math.abs((bbl.getX()) - (player.getX() + player.getWidth()))) < Math.min(Math.abs((bbl.getY() + bbl.getWH()) - (player.getY())), Math.abs((bbl.getY()) - (player.getY() + player.getHeight())))) {
+                      bbl.flipXDirection();                  
+                  } else {
+                     bbl.flipYDirection();
+                  }
+               }
                /*for (int j = i + 1; j < bbls.size(); j++) {
                   Bubble b = bbls.get(j);
                   Ellipse2D.Double bubble2 = new Ellipse2D.Double(b.getX(), b.getY(), b.getWH(), b.getWH());
@@ -112,38 +124,43 @@ public class World extends JPanel{
 								if (b.getWH() / 20 - 1 == 0) {
 									rope = null;
 									bbls.remove(j);
+                           usr.setScore(usr.getScore() + 4);
+                           frame.setTitle(usr.getScore() + "");
 									break;
 								}
-                     if (Math.min(Math.abs((rope.getX() + rope.getWidth()) - (b.getX())), Math.abs((rope.getX()) - (b.getX() + b.getWH()))) < Math.min(Math.abs((rope.getY() + rope.getHeight()) - (b.getY())), Math.abs((rope.getY()) - (b.getY() + b.getWH())))) {
-                        //x collision
-								if (b.getWH() / 20 - 1 != 0) {
-									Bubble bb1 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), b.getXDirection(), -b.getYDirection());
-									Bubble bb2 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), b.getXDirection(), b.getYDirection());
-									bbls.add(bb1);
-									bbls.add(bb2);
-									rope = null;
-									bbls.remove(j);
-									break;
-								}
-								
-                     	} else {
-                        //y collision
-									if (b.getWH() / 20 - 1 != 0) {
-										Bubble bb1 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), b.getXDirection(), -Math.abs(b.getYDirection()));
-										Bubble bb2 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), -Math.abs(b.getYDirection()));
-										bbls.add(bb1);
-										bbls.add(bb2);
-										rope = null;
-										bbls.remove(j);
-										break;
-									}
-                    		}
-								
-                  }
-					}
-			}
-			repaint();
-		}
+                        if (Math.min(Math.abs((rope.getX() + rope.getWidth()) - (b.getX())), Math.abs((rope.getX()) - (b.getX() + b.getWH()))) < Math.min(Math.abs((rope.getY() + rope.getHeight()) - (b.getY())), Math.abs((rope.getY()) - (b.getY() + b.getWH())))) {
+                           //x collision
+								   if (b.getWH() / 20 - 1 != 0) {
+									   Bubble bb1 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), -b.getYDirection());
+									   Bubble bb2 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), b.getYDirection());
+									   bbls.add(bb1);
+									   bbls.add(bb2);
+									   rope = null;
+									   bbls.remove(j);
+                              //System.out.println((5 - (b.getWH() / 20)));
+                              usr.setScore(usr.getScore() + (5 - (b.getWH() / 20)));
+                              frame.setTitle(usr.getScore() + "");
+   									break;
+   								}
+                        } else {
+                           //y collision
+   								if (b.getWH() / 20 - 1 != 0) {
+   									Bubble bb1 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), b.getXDirection(), -Math.abs(b.getYDirection()));
+   									Bubble bb2 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), -Math.abs(b.getYDirection()));
+   									bbls.add(bb1);
+   									bbls.add(bb2);
+   									rope = null;
+   									bbls.remove(j);
+                              usr.setScore(usr.getScore() + ( 5 - (b.getWH() / 20)));
+                              frame.setTitle(usr.getScore() + "");
+   									break;
+   								}
+                       	}	
+                     }
+					   }
+			   }
+			   repaint();
+		   }
 		});
 		
 		ropeTimer.start();

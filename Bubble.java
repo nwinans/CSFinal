@@ -26,8 +26,8 @@ public class Bubble extends Item{
       color = new Color(r,g,b);
    }
 	
-	public Bubble(int s, int xCor, int yCor, int xDir, int yDir) {
-		super(xCor, yCor, s * 20, s * 20);
+	public Bubble(int s, int x, int y, int xDir, int yDir) {
+		super(x, y, s * 20, s * 20);
 		
 		xDirection = xDir;
 		yDirection = yDir;

@@ -22,6 +22,15 @@ public class BallAttack {
 		startNewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				try { 
+            
+	            File file = new File("save.dat");
+
+	            if (file.createNewFile()){
+	               System.out.println("File is created!");
+	            } else {
+	               System.out.println("File already exists.");
+	            }
+               
 					User user = new User("Nick","Drew");
 					ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("save.dat"));
    				out.writeObject(user);

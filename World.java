@@ -25,9 +25,7 @@ public class World extends JPanel{
       frame.add(this);
       frame.setResizable(false);
                
-      bbls = new ArrayList<Bubble>(4);
-      
-		player = new Player();
+      loadLevel();
 		
 		frame.addKeyListener(new KeyListener() {
 			public void keyTyped(KeyEvent e) {
@@ -52,11 +50,6 @@ public class World extends JPanel{
 			public void keyReleased(KeyEvent e) {
 			}
 		});
-				
-      for (int i = 1; i < 5; i++) {
-         Bubble bbl = new Bubble(i);
-         bbls.add(bbl);
-      }
       
       Timer tmr = new Timer(10, new ActionListener() {
          public void actionPerformed(ActionEvent e) {
@@ -71,7 +64,7 @@ public class World extends JPanel{
                if (bubble1.getBounds2D().intersects(p1.getBounds2D())) {
                   usr.loseLife();
                   if (usr.getLives() == 0) {
-                     bbls.removeAll(bbls);
+                     endGame();
                   }
                   if (Math.min(Math.abs((bbl.getX() + bbl.getWH()) - (player.getX())), Math.abs((bbl.getX()) - (player.getX() + player.getWidth()))) < Math.min(Math.abs((bbl.getY() + bbl.getWH()) - (player.getY())), Math.abs((bbl.getY()) - (player.getY() + player.getHeight())))) {
                       bbl.flipXDirection();                  
@@ -126,11 +119,18 @@ public class World extends JPanel{
 								if (b.getWH() / 20 - 1 == 0) {
 									rope = null;
 									bbls.remove(j);
-                           if (bbls.size() == 0) save();
+                           if (bbls.size() == 0) nextLevel();
                            usr.setScore(usr.getScore() + 4);
                            frame.setTitle(usr.getScore() + "");
 									break;
 								}
+                        
+                        /* basically, this finds whether the two objects are touching vertically or horizontally by calculating the distance
+                         * between the right edge of an object and the left edge of a second object and then finding the minimum of that 
+                         * and that to the left edge of the first and the right edge of the second. Then that is compared to the top and
+                         * bottom of a second object through finding the minimum once again. If the distance in the x direction is smaller
+                         * than the difference in the y direction, the two objects are touching in the x direction and vice versa.
+                        */
                         if (Math.min(Math.abs((rope.getX() + rope.getWidth()) - (b.getX())), Math.abs((rope.getX()) - (b.getX() + b.getWH()))) < Math.min(Math.abs((rope.getY() + rope.getHeight()) - (b.getY())), Math.abs((rope.getY()) - (b.getY() + b.getWH())))) {
                            //x collision
 								   if (b.getWH() / 20 - 1 != 0) {
@@ -140,7 +140,6 @@ public class World extends JPanel{
 									   bbls.add(bb2);
 									   rope = null;
 									   bbls.remove(j);
-                              //System.out.println((5 - (b.getWH() / 20)));
                               usr.setScore(usr.getScore() + (5 - (b.getWH() / 20)));
                               frame.setTitle(usr.getScore() + "");
    									break;
@@ -205,5 +204,32 @@ public class World extends JPanel{
          e.printStackTrace();
       }
    }  
+   
+   public void loadLevel() {
+      Level lvl;
+      if (usr.getLevel() % 2 == 0) {
+         lvl = new Level1();
+      } else {
+         lvl = new Level2();
+      }
+   
+      bbls = lvl.getBubbles();
+            
+		player = new Player();
+   }
+   
+   public void nextLevel() {
+      save();
+      bbls.removeAll(bbls);
+      loadLevel();
+   }
+   
+   public void endGame() {
+      bbls.removeAll(bbls);
+      try {
+         new FileOutputStream("save.dat").close();
+      } catch (Exception e) {
+         e.printStackTrace();
+      }
+   }
 }
- 

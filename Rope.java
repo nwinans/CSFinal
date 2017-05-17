@@ -6,6 +6,6 @@ public class Rope extends Item {
 	
 	public void grow() {
 		super.setHeight(getHeight() + 10);
-		super.incrementY(-10);
+		super.setY(getY() - 10);
 	}
 }

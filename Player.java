@@ -24,11 +24,11 @@ public class Player extends Item {
 	}
 	
 	public void moveRight() {
-		super.incrementX(SPEED);
+		super.setX(getX() + SPEED);
 	}
 	
 	public void moveLeft() {
-		super.incrementX(-SPEED);
+		super.setX(getX() - SPEED);
 	}	
 }
 	

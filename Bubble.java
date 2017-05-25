@@ -7,7 +7,7 @@ public class Bubble extends Item{
    private final int HORIZONTAL_MULTIPLIER = 2;
    private final int VERTICAL_MULTIPLIER = 1;
    private final int HEIGHT_MULTIPLIER = 3;
-   private final int MAX_SPEED = 6;
+   private final int MAX_SPEED = 5;
 
    private int xDirection = 1;
    private int yDirection = 1;
@@ -55,17 +55,18 @@ public class Bubble extends Item{
    }
    
    public int getHorizontalSpeed() {
-      return (MAX_SPEED - (getWidth() / 20)) / 2 * HORIZONTAL_MULTIPLIER * xDirection;
+      return (MAX_SPEED - (getWidth() / 20)) * HORIZONTAL_MULTIPLIER * xDirection;
    }
    
    public int getVerticalSpeed() {
-      return (MAX_SPEED - (getWidth() / 20)) / 2 * VERTICAL_MULTIPLIER * yDirection;
+      return (MAX_SPEED - (getWidth() / 20)) * VERTICAL_MULTIPLIER * yDirection;
    }
-   
-   public int getMaxHeight() {
-      return getHeight() / 20 * HEIGHT_MULTIPLIER;
-   }
-      
+	
+	public void move(int direction) {
+		setX(getX() + getHorizontalSpeed());
+		setY(getY() + getVerticalSpeed());
+	}
+         
    public int getXDirection() {
       return xDirection;
    }

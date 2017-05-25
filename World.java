@@ -14,6 +14,7 @@ public class World extends JPanel{
    private ArrayList<Bubble> bbls;
 	
 	private Player player;
+	
  	private Rope rope;  
 	
    public World(User user) {
@@ -27,7 +28,7 @@ public class World extends JPanel{
                
       loadLevel();
 		
-		frame.addKeyListener(new KeyListener() {
+		frame.addKeyListener(new KeyListener() {			
 			public void keyTyped(KeyEvent e) {
 			}
 	
@@ -35,13 +36,13 @@ public class World extends JPanel{
 				int code = e.getKeyCode();
 				if (code == KeyEvent.VK_LEFT)
 					if (player.getX() > 0)
-						player.moveLeft();
+						player.move(-1);
 				if (code == KeyEvent.VK_RIGHT)
 					if (player.getX() + player.getWidth() < frame.getWidth())
-						player.moveRight();
+						player.move(1);
 				if (code == KeyEvent.VK_UP)
 					if (player.canShoot()) {
-						rope = new Rope((player.getX() * 2 + player.getWidth() - 10) / 2, player.getY() - 20);
+						rope = new Rope((player.getX() * 2 + player.getWidth()) / 2, player.getY() - 20);
                   player.shoot();
                }
 				repaint();
@@ -67,7 +68,7 @@ public class World extends JPanel{
                      endGame();
                   }
                   if (Math.min(Math.abs((bbl.getX() + bbl.getWH()) - (player.getX())), Math.abs((bbl.getX()) - (player.getX() + player.getWidth()))) < Math.min(Math.abs((bbl.getY() + bbl.getWH()) - (player.getY())), Math.abs((bbl.getY()) - (player.getY() + player.getHeight())))) {
-                      bbl.flipXDirection();                  
+                     bbl.flipXDirection();                  
                   } else {
                      bbl.flipYDirection();
                   }
@@ -94,8 +95,7 @@ public class World extends JPanel{
                      }
                   }
                }*/
-               bbl.setX(bbl.getX() + bbl.getHorizontalSpeed());
-               bbl.setY(bbl.getY() + bbl.getVerticalSpeed());
+               bbl.move(1);
                }
             repaint();
          }
@@ -110,7 +110,7 @@ public class World extends JPanel{
 					if (rope.getY() < 0) 
 						rope = null;
 					else {
-						rope.grow();
+						rope.move(0);
 						Rectangle bounds = new Rectangle(rope.getX(), rope.getY(), rope.getWidth(), rope.getHeight());
                	for (int j = 0; j < bbls.size(); j++) {
                   	Bubble b = bbls.get(j);
@@ -120,14 +120,14 @@ public class World extends JPanel{
 									rope = null;
 									bbls.remove(j);
                            if (bbls.size() == 0) nextLevel();
-                           usr.setScore(usr.getScore() + 4);
+                           usr.incrementScore(4);
                            frame.setTitle(usr.getScore() + "");
 									break;
 								}
                         
                         /* basically, this finds whether the two objects are touching vertically or horizontally by calculating the distance
                          * between the right edge of an object and the left edge of a second object and then finding the minimum of that 
-                         * and that to the left edge of the first and the right edge of the second. Then that is compared to the top and
+                         * and the left edge of the first and the right edge of the second. Then that is compared to the top and
                          * bottom of a second object through finding the minimum once again. If the distance in the x direction is smaller
                          * than the difference in the y direction, the two objects are touching in the x direction and vice versa.
                         */
@@ -181,7 +181,7 @@ public class World extends JPanel{
       
       //paint player
 		g.setColor(Color.red);
-		g.fillRect(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+		g.fillPolygon(new int[] {player.getX(), player.getX() + 40, player.getX() + 50, player.getX() + 90}, new int[] {player.getY() + 100, player.getY(), player.getY(), player.getY() + 100}, 4);
       
       //paint rope if shot
 		if (rope != null) {
@@ -231,5 +231,33 @@ public class World extends JPanel{
       } catch (Exception e) {
          e.printStackTrace();
       }
+		
+		Leaderboard lb = new Leaderboard();
+		int yo = lb.addUser(usr);
+      int selection;
+		if (yo == 0)
+			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". Unforunately you did not make the leaderboards. \nWould you like to return to the main menu?", "Return To The Main Menu?", JOptionPane.YES_NO_OPTION);
+		else if (yo == 1)
+			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the highest score.");
+		else if (yo == 2) 
+			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the " + yo + "nd highest score.");
+		else if (yo == 3) 
+			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the " + yo + "rd highest score.");
+		else 
+			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the " + yo + "th highest score.");
+         
+      if (selection == JOptionPane.YES_OPTION) {
+         String[] args = {};
+         BallAttack.main(args);
+         frame.dispose();
+     } else
+     System.exit(0);
+      
+		ArrayList<User> lbs = lb.getLeaderboard();
+		for (User user : lbs) {
+			System.out.println(user);
+		}
+      
+		
    }
 }

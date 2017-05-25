@@ -4,8 +4,8 @@ public class Rope extends Item {
 		super (x, y, 10, 20);
 	}
 	
-	public void grow() {
-		super.setHeight(getHeight() + 10);
-		super.setY(getY() - 10);
+	public void move(int direction) {
+		setHeight(getHeight() + 15);
+		setY(getY() - 15);
 	}
 }

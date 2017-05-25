@@ -1,7 +1,9 @@
-public class Item extends Coordinate{
+import java.awt.Color;
+public abstract class Item extends Coordinate{
 
 	private int height;
 	private int width;
+	private Color color;
 	
 	public Item(int x, int y, int w, int h) {	
 		super(x, y);
@@ -20,4 +22,6 @@ public class Item extends Coordinate{
 	public void setHeight(int h) {	
 		height = h;
 	}
+	
+	public abstract void move(int direction);
 }

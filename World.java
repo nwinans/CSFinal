@@ -220,6 +220,7 @@ public class World extends JPanel{
    
    public void nextLevel() {
       save();
+      usr.addLife();
       bbls.removeAll(bbls);
       loadLevel();
    }

@@ -33,9 +33,9 @@ public class Bubble extends Item{
 		yDirection = yDir;
 		Random rand = new Random();
       
-      float r = rand.nextFloat();
-      float g = rand.nextFloat();
-      float b = rand.nextFloat();
+      float r = rand.nextFloat() / 2f;
+      float g = rand.nextFloat() / 2f;
+      float b = rand.nextFloat() / 2f;
       
       color = new Color(r,g,b);
 	}

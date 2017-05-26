@@ -14,9 +14,8 @@ public class BallAttack {
 
 			if (!file.exists()) {
 	    		if (file.createNewFile()){
-					
 	    			User user = new User("Nick");
-					user.setScore(10);
+					user.setScore(150);
 				
 					ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("leaderboard.dat"));
    				out.writeObject(user);
@@ -40,7 +39,6 @@ public class BallAttack {
 		startNewBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent ev) {
 				try { 
-            
 	            File file = new File("save.dat");
 
 	            if (file.createNewFile()){

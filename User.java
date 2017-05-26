@@ -32,6 +32,10 @@ public class User implements Serializable {
    public void loseLife() {
       lives--;
    }
+   
+   public void addLife() {
+      lives++;
+   }
 
    public int getScore() {
       return totalScore;

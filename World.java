@@ -12,6 +12,7 @@ public class World extends JPanel{
    private User usr;
    private JFrame frame;
    private ArrayList<Bubble> bbls;
+   private ArrayList<String> msgs;
 	
 	private Player player;
 	
@@ -26,7 +27,12 @@ public class World extends JPanel{
       frame.add(this);
       frame.setResizable(false);
                
+      msgs = new ArrayList<String>();
+      msgs.add("Load successful");         
+           
       loadLevel();
+      
+      
 		
 		frame.addKeyListener(new KeyListener() {			
 			public void keyTyped(KeyEvent e) {
@@ -62,11 +68,12 @@ public class World extends JPanel{
                   bbl.flipYDirection();
                Ellipse2D.Double bubble1 = new Ellipse2D.Double(bbl.getX(), bbl.getY(), bbl.getWH(), bbl.getWH());
                Polygon p1 = new Polygon(new int[] {player.getX(), player.getX() + 40, player.getX() + 50, player.getX() + 90}, new int[] {player.getY() + 100, player.getY(), player.getY(), player.getY() + 100}, 4);
-               if (bubble1.getBounds2D().intersects(p1.getBounds2D())) {
+               if (bubble1.getBounds().intersects(p1.getBounds())) {
                   usr.loseLife();
                   if (usr.getLives() == 0) {
                      endGame();
-                  }
+                  } else 
+                     msgs.add("You lost a life!");
                   if (Math.min(Math.abs((bbl.getX() + bbl.getWH()) - (player.getX())), Math.abs((bbl.getX()) - (player.getX() + player.getWidth()))) < Math.min(Math.abs((bbl.getY() + bbl.getWH()) - (player.getY())), Math.abs((bbl.getY()) - (player.getY() + player.getHeight())))) {
                      bbl.flipXDirection();                  
                   } else {
@@ -118,7 +125,6 @@ public class World extends JPanel{
 									   rope = null;
 									   bbls.remove(j);
                               usr.setScore(usr.getScore() + (5 - (b.getWH() / 20)));
-                              frame.setTitle(usr.getScore() + "");
    									break;
    								}
                         } else {
@@ -131,7 +137,6 @@ public class World extends JPanel{
    									rope = null;
    									bbls.remove(j);
                               usr.setScore(usr.getScore() + ( 5 - (b.getWH() / 20)));
-                              frame.setTitle(usr.getScore() + "");
    									break;
    								}
                        	}	
@@ -143,6 +148,16 @@ public class World extends JPanel{
 		});
 		
 		ropeTimer.start();
+      
+      Timer messageTimer = new Timer(1000 * 2, new ActionListener() {
+         public void actionPerformed(ActionEvent e) {
+            if (msgs.size() != 0) {
+               msgs.remove(0);
+            }
+         }
+      });
+      
+      messageTimer.start();
       
       frame.setVisible(true);
    }
@@ -174,7 +189,8 @@ public class World extends JPanel{
 		g.drawString("Score: " + usr.getScore(), 10, 850);
 		g.drawString("Lives: " + usr.getLives(), 210, 850);
 		g.drawString("Level: " + usr.getLevel(), 410, 850);
-		//g.drawString("Saved successfully", 610, 850);
+      if (msgs.size() != 0) 
+		   g.drawString(msgs.get(0), 610, 850);
    }
    
    public void save() {
@@ -184,9 +200,7 @@ public class World extends JPanel{
          ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("save.dat"));
    	   out.writeObject(usr);
    	   out.flush();
-   	   out.close();
-         
-         System.out.println("Save successful...");
+   	   out.close();  
       } catch (Exception e) {
          e.printStackTrace();
       }
@@ -199,20 +213,23 @@ public class World extends JPanel{
       } else {
          lvl = new Level1();
       }
-   
       bbls = lvl.getBubbles();
             
 		player = new Player();
+      
+      msgs.add("Level " + usr.getLevel());
    }
    
    public void nextLevel() {
       save();
       usr.addLife();
+      msgs.add("You received an extra life!");
       bbls.removeAll(bbls);
       loadLevel();
    }
    
    public void endGame() {
+      msgs.add("Game Over!");
 		//remove all the bubbles from the screen so the user cannot hit them anymore
       bbls.removeAll(bbls);
       try {
@@ -246,10 +263,5 @@ public class World extends JPanel{
          frame.dispose();
      } else
      		System.exit(0);
-      
-		ArrayList<User> lbs = lb.getLeaderboard();
-		for (User user : lbs) {
-			System.out.println(user);
-		}
    }
 }

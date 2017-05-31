@@ -50,27 +50,6 @@ public class User implements Serializable {
 	}
 	
 	public String toString() {
-		return player + ", Score: " + getScore();
+		return player + " - Score: " + getScore() + " - Level: " + getLevel();
 	}
 }
-
-/*to save
-try {
-   ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("save.dat"));
-   out.writeObject(user);
-   out.flush();
-   out.close();
-} catch (Exception e) {
-   e.printStackTrace();
-
-}
-to load
-try {
-   ObjectInputStream in = new ObjectInputStream(new FileInputStream("save.dat"));
-   User user = (User) in.readObject();
-   in.close();
-} catch (Exception e) {
-   e.printStackTrace();
-}
-*/
-   

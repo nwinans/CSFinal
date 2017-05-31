@@ -21,7 +21,7 @@ public class World extends JPanel{
       usr = user;
       
       frame = new JFrame("Level " + usr.getLevel());
-      frame.setSize(1200, 800);
+      frame.setSize(1200, 900);
       frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);  
       frame.add(this);
       frame.setResizable(false);
@@ -58,10 +58,10 @@ public class World extends JPanel{
                Bubble bbl = bbls.get(i);
                if (bbl.getX() + bbl.getWH() > getWidth() || bbl.getX() < 0)
                   bbl.flipXDirection();
-               if (bbl.getY() + bbl.getWH() > getHeight() || bbl.getY() < 0)
+               if (bbl.getY() + bbl.getWH() > getHeight() - 70 || bbl.getY() < 0)
                   bbl.flipYDirection();
                Ellipse2D.Double bubble1 = new Ellipse2D.Double(bbl.getX(), bbl.getY(), bbl.getWH(), bbl.getWH());
-               Rectangle p1 = new Rectangle(player.getX(), player.getY(), player.getWidth(), player.getHeight());
+               Polygon p1 = new Polygon(new int[] {player.getX(), player.getX() + 40, player.getX() + 50, player.getX() + 90}, new int[] {player.getY() + 100, player.getY(), player.getY(), player.getY() + 100}, 4);
                if (bubble1.getBounds2D().intersects(p1.getBounds2D())) {
                   usr.loseLife();
                   if (usr.getLives() == 0) {
@@ -73,28 +73,6 @@ public class World extends JPanel{
                      bbl.flipYDirection();
                   }
                }
-               /*for (int j = i + 1; j < bbls.size(); j++) {
-                  Bubble b = bbls.get(j);
-                  Ellipse2D.Double bubble2 = new Ellipse2D.Double(b.getX(), b.getY(), b.getWH(), b.getWH());
-                  if (bubble1.getBounds2D().intersects(bubble2.getBounds2D())){
-                     if (Math.min(Math.abs((bbl.getX() + bbl.getWH()) - (b.getX())), Math.abs((bbl.getX()) - (b.getX() + b.getWH()))) < Math.min(Math.abs((bbl.getY() + bbl.getWH()) - (b.getY())), Math.abs((bbl.getY()) - (b.getY() + b.getWH())))) {
-                        //x collision
-                        //bbl.flipXDirection();
-								if (b.getWH() / 20 - 1 != 0) {
-									Bubble bb1 = new Bubble((b.getWH() / 20) - 1);
-									Bubble bb2 = new Bubble((b.getWH() / 20) - 1);
-									bbls.add(bb1);
-									bbls.add(bb2);
-								}
-								bbls.remove(j);
-                        //b.flipXDirection();
-                     } else {
-                        //y collision
-                        bbl.flipYDirection();
-                        b.flipYDirection();  
-                     }
-                  }
-               }*/
                bbl.move(1);
                }
             repaint();
@@ -121,7 +99,6 @@ public class World extends JPanel{
 									bbls.remove(j);
                            if (bbls.size() == 0) nextLevel();
                            usr.incrementScore(4);
-                           frame.setTitle(usr.getScore() + "");
 									break;
 								}
                         
@@ -188,6 +165,16 @@ public class World extends JPanel{
 			g.setColor(Color.blue);
 			g.fillRect(rope.getX(), rope.getY(), rope.getWidth(), rope.getHeight());
 		}
+		
+		//draw divider separating the game from the info area
+		g.setColor(Color.black);
+		g.fillRect(0, 800, getWidth(), 2);
+		
+		g.setFont(new Font("SansSerif", Font.BOLD, 30)); 
+		g.drawString("Score: " + usr.getScore(), 10, 850);
+		g.drawString("Lives: " + usr.getLives(), 210, 850);
+		g.drawString("Level: " + usr.getLevel(), 410, 850);
+		//g.drawString("Saved successfully", 610, 850);
    }
    
    public void save() {
@@ -199,7 +186,7 @@ public class World extends JPanel{
    	   out.flush();
    	   out.close();
          
-         System.out.println("Save successfull...");
+         System.out.println("Save successful...");
       } catch (Exception e) {
          e.printStackTrace();
       }
@@ -208,9 +195,9 @@ public class World extends JPanel{
    public void loadLevel() {
       Level lvl;
       if (usr.getLevel() % 2 == 0) {
-         lvl = new Level1();
-      } else {
          lvl = new Level2();
+      } else {
+         lvl = new Level1();
       }
    
       bbls = lvl.getBubbles();
@@ -226,39 +213,43 @@ public class World extends JPanel{
    }
    
    public void endGame() {
+		//remove all the bubbles from the screen so the user cannot hit them anymore
       bbls.removeAll(bbls);
       try {
+			//to empty out the save.dat file, we close it right after opening it
          new FileOutputStream("save.dat").close();
       } catch (Exception e) {
          e.printStackTrace();
       }
 		
+		//create a new leaderboard object that contains the leaderboard file
 		Leaderboard lb = new Leaderboard();
+		//try to add the current user to the leaderboard - the place the user is inserted in the leaderboard is set as an int called yo
 		int yo = lb.addUser(usr);
+		//selection will hold what option the user selects on the final score screen on whether they want to go to the main menu or exit (yes or cancel)
       int selection;
+		//if the user's score wasn't high enough to make the leaderboards
 		if (yo == 0)
-			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". Unforunately you did not make the leaderboards. \nWould you like to return to the main menu?", "Return To The Main Menu?", JOptionPane.YES_NO_OPTION);
+			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". Unforunately you did not make the leaderboards.\nWould you like to return to the main menu?", "Return To The Main Menu?", JOptionPane.YES_NO_OPTION);
 		else if (yo == 1)
-			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the highest score.");
+			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the highest score. Congrats!\nWould you like to return to the main menu?", "Return To The Main Menu?", JOptionPane.YES_NO_OPTION);
 		else if (yo == 2) 
-			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the " + yo + "nd highest score.");
+			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the " + yo + "nd highest score.\nWould you like to return to the main menu?", "Return To The Main Menu?", JOptionPane.YES_NO_OPTION);
 		else if (yo == 3) 
-			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the " + yo + "rd highest score.");
+			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the " + yo + "rd highest score.\nWould you like to return to the main menu?", "Return To The Main Menu?", JOptionPane.YES_NO_OPTION);
 		else 
-			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the " + yo + "th highest score.");
+			selection = JOptionPane.showConfirmDialog(null, "Final Score: " + usr.getScore() + ". This is the " + yo + "th highest score.\nWould you like to return to the main menu?", "Return To The Main Menu?", JOptionPane.YES_NO_OPTION);
          
       if (selection == JOptionPane.YES_OPTION) {
          String[] args = {};
          BallAttack.main(args);
          frame.dispose();
      } else
-     System.exit(0);
+     		System.exit(0);
       
 		ArrayList<User> lbs = lb.getLeaderboard();
 		for (User user : lbs) {
 			System.out.println(user);
 		}
-      
-		
    }
 }

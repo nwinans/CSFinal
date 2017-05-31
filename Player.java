@@ -7,7 +7,7 @@ public class Player extends Item {
 	private Color color;
 	
 	public Player() {
-		super(10, 800 - 100 - 10, 90, 100);
+		super(10, 800 - 100, 90, 100);
 		timeToShoot = 0;
 	}
 		

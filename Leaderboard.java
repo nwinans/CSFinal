@@ -15,8 +15,6 @@ public class Leaderboard {
 		try {
       	ObjectInputStream in = new ObjectInputStream(new FileInputStream("leaderboard.dat"));
 			
-			
-			
 			boolean check = true;
 			while (check) {
 				try {

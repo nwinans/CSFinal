@@ -69,8 +69,10 @@ public class BallAttack {
                mainFrame.dispose();
                World world = new World(user);
             } catch (Exception e) {
+					//any error that occurs will be because the file either doesnt exist or doesnt contain a user
+					//either can be fixed by starting a new game which creates a file if necessary and inserts a user
+					//as a result we don't use the Exception message and instead tell the user to start a new game
                JOptionPane.showMessageDialog(null, "There was an error loading the save file. This occurs when there is no save data. Try starting a new game!", "Error!", JOptionPane.ERROR_MESSAGE);
-               e.printStackTrace();
             }
          }
       });

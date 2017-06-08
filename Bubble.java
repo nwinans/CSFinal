@@ -27,11 +27,6 @@ public class Bubble extends Item{
 		yDirection = yDir;
 	}
       
-	//the width and the height are the same, so this method's name is shorter to type than getHeight or getWidth
-   public int getWH() {
-      return getHeight();
-   }
-      
 	/*this returns how much the ball should move when the move method is called
 		the smaller balls should travel faster, so we subtract the ball's level from max speed to create the inverse relationship
 		we don't store the ball's size other than it's width and height so we divide the width by the same amount we multiplied the size
@@ -65,10 +60,12 @@ public class Bubble extends Item{
       xDirection *= -1;
    }
    
+	//return the direction - used the same as getXDirection
    public int getYDirection() {
       return yDirection;
    }
    
+	//flip the y direction when the ball hits an item
    public void flipYDirection() {
       yDirection *= -1;
    }

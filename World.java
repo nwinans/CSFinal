@@ -11,7 +11,7 @@ public class World extends JPanel{
 
    private User usr;
    private JFrame frame;
-   private ArrayList<Bubble> bbls;
+   private ArrayList<Item> bbls;
    private ArrayList<String> msgs;
 	
 	private Player player;
@@ -31,8 +31,6 @@ public class World extends JPanel{
       msgs.add("Load successful");         
            
       loadLevel();
-      
-      
 		
 		frame.addKeyListener(new KeyListener() {			
 			public void keyTyped(KeyEvent e) {
@@ -61,12 +59,12 @@ public class World extends JPanel{
       Timer tmr = new Timer(10, new ActionListener() {
          public void actionPerformed(ActionEvent e) {
             for (int i = 0; i < bbls.size(); i ++) {
-               Bubble bbl = bbls.get(i);
-               if (bbl.getX() + bbl.getWH() > getWidth() || bbl.getX() < 0)
+               Bubble bbl = (Bubble) bbls.get(i);
+               if (bbl.getX() + bbl.getWidth() > getWidth() || bbl.getX() < 0)
                   bbl.flipXDirection();
-               if (bbl.getY() + bbl.getWH() > getHeight() - 70 || bbl.getY() < 0)
+               if (bbl.getY() + bbl.getHeight() > getHeight() - 70 || bbl.getY() < 0)
                   bbl.flipYDirection();
-               Ellipse2D.Double bubble1 = new Ellipse2D.Double(bbl.getX(), bbl.getY(), bbl.getWH(), bbl.getWH());
+               Ellipse2D.Double bubble1 = new Ellipse2D.Double(bbl.getX(), bbl.getY(), bbl.getWidth(), bbl.getHeight());
                Polygon p1 = new Polygon(new int[] {player.getX(), player.getX() + 40, player.getX() + 50, player.getX() + 90}, new int[] {player.getY() + 100, player.getY(), player.getY(), player.getY() + 100}, 4);
                if (bubble1.getBounds().intersects(p1.getBounds())) {
                   usr.loseLife();
@@ -74,7 +72,7 @@ public class World extends JPanel{
                      endGame();
                   } else 
                      msgs.add("You lost a life!");
-                  if (Math.min(Math.abs((bbl.getX() + bbl.getWH()) - (player.getX())), Math.abs((bbl.getX()) - (player.getX() + player.getWidth()))) < Math.min(Math.abs((bbl.getY() + bbl.getWH()) - (player.getY())), Math.abs((bbl.getY()) - (player.getY() + player.getHeight())))) {
+                  if (Math.min(Math.abs((bbl.getX() + bbl.getWidth()) - (player.getX())), Math.abs((bbl.getX()) - (player.getX() + player.getWidth()))) < Math.min(Math.abs((bbl.getY() + bbl.getHeight()) - (player.getY())), Math.abs((bbl.getY()) - (player.getY() + player.getHeight())))) {
                      bbl.flipXDirection();                  
                   } else {
                      bbl.flipYDirection();
@@ -98,10 +96,10 @@ public class World extends JPanel{
 						rope.move(0);
 						Rectangle bounds = new Rectangle(rope.getX(), rope.getY(), rope.getWidth(), rope.getHeight());
                	for (int j = 0; j < bbls.size(); j++) {
-                  	Bubble b = bbls.get(j);
-                  	Ellipse2D.Double bubbleBounds = new Ellipse2D.Double(b.getX(), b.getY(), b.getWH(), b.getWH());
-                  	if (bounds.getBounds2D().intersects(bubbleBounds.getBounds2D())){
-								if (b.getWH() / 20 - 1 == 0) {
+                  	Bubble b = (Bubble) bbls.get(j);
+                  	Ellipse2D.Double bubbleBounds = new Ellipse2D.Double(b.getX(), b.getY(), b.getWidth(), b.getHeight());
+                  	if (bounds.getBounds().intersects(bubbleBounds.getBounds())){
+								if (b.getWidth() / 20 - 1 == 0) {
 									rope = null;
 									bbls.remove(j);
                            if (bbls.size() == 0) nextLevel();
@@ -115,28 +113,28 @@ public class World extends JPanel{
                          * bottom of a second object through finding the minimum once again. If the distance in the x direction is smaller
                          * than the difference in the y direction, the two objects are touching in the x direction and vice versa.
                         */
-                        if (Math.min(Math.abs((rope.getX() + rope.getWidth()) - (b.getX())), Math.abs((rope.getX()) - (b.getX() + b.getWH()))) < Math.min(Math.abs((rope.getY() + rope.getHeight()) - (b.getY())), Math.abs((rope.getY()) - (b.getY() + b.getWH())))) {
+                        if (Math.min(Math.abs((rope.getX() + rope.getWidth()) - (b.getX())), Math.abs((rope.getX()) - (b.getX() + b.getWidth()))) < Math.min(Math.abs((rope.getY() + rope.getHeight()) - (b.getY())), Math.abs((rope.getY()) - (b.getY() + b.getHeight())))) {
                            //x collision
-								   if (b.getWH() / 20 - 1 != 0) {
-									   Bubble bb1 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), -b.getYDirection());
-									   Bubble bb2 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), b.getYDirection());
+								   if (b.getWidth() / 20 - 1 != 0) {
+									   Bubble bb1 = new Bubble((b.getWidth() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), -b.getYDirection());
+									   Bubble bb2 = new Bubble((b.getWidth() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), b.getYDirection());
 									   bbls.add(bb1);
 									   bbls.add(bb2);
 									   rope = null;
 									   bbls.remove(j);
-                              usr.setScore(usr.getScore() + (5 - (b.getWH() / 20)));
+                              usr.setScore(usr.getScore() + (5 - (b.getWidth() / 20)));
    									break;
    								}
                         } else {
                            //y collision
-   								if (b.getWH() / 20 - 1 != 0) {
-   									Bubble bb1 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), b.getXDirection(), -Math.abs(b.getYDirection()));
-   									Bubble bb2 = new Bubble((b.getWH() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), -Math.abs(b.getYDirection()));
+   								if (b.getWidth() / 20 - 1 != 0) {
+   									Bubble bb1 = new Bubble((b.getWidth() / 20) - 1, b.getX(), b.getY(), b.getXDirection(), -Math.abs(b.getYDirection()));
+   									Bubble bb2 = new Bubble((b.getWidth() / 20) - 1, b.getX(), b.getY(), -b.getXDirection(), -Math.abs(b.getYDirection()));
    									bbls.add(bb1);
    									bbls.add(bb2);
    									rope = null;
    									bbls.remove(j);
-                              usr.setScore(usr.getScore() + ( 5 - (b.getWH() / 20)));
+                              usr.setScore(usr.getScore() + ( 5 - (b.getWidth() / 20)));
    									break;
    								}
                        	}	
@@ -149,15 +147,22 @@ public class World extends JPanel{
 		
 		ropeTimer.start();
       
-      Timer messageTimer = new Timer(1000 * 2, new ActionListener() {
-         public void actionPerformed(ActionEvent e) {
-            if (msgs.size() != 0) {
-               msgs.remove(0);
-            }
-         }
-      });
-      
-      messageTimer.start();
+		Thread msgThread = new Thread(new Runnable() {
+			public void run() {
+				while(true) {
+					if (msgs.size() != 0) {
+						try {
+							Thread.sleep(2000);
+							msgs.remove(0);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+               	
+					}
+				}
+			}
+		});
+		msgThread.start();
       
       frame.setVisible(true);
    }
@@ -166,9 +171,9 @@ public class World extends JPanel{
       super.paintComponent(g);
       
       //paint bubbles
-      for (Bubble bbl : bbls) {
+      for (Item bbl : bbls) {
          g.setColor(bbl.getColor());
-         g.fillOval(bbl.getX(), bbl.getY(), bbl.getWH(), bbl.getWH());
+         g.fillOval(bbl.getX(), bbl.getY(), bbl.getWidth(), bbl.getHeight());
       }
       
       //paint player

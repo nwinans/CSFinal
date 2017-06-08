@@ -1,6 +1,6 @@
 import java.awt.Color;
 public abstract class Item extends Coordinate{
-
+	//width, height, and color (x and y are stored in coordinate
 	private int height;
 	private int width;
 	private Color color;
@@ -28,5 +28,6 @@ public abstract class Item extends Coordinate{
 		return color;
 	}
 	
+	//abstract move method that is implemented in ball player and rope (int handles whether object should move left or right (only player uses this)
 	public abstract void move(int direction);
 }

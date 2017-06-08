@@ -1,8 +1,11 @@
 import java.io.Serializable;
+//serializable allows us to save this object in a file (enables leaderboards and saving/continuing the game
 public class User implements Serializable {
 
+	//initial amount of lives the user has
    private final int MAX_LIVES = 5;
 
+	//player name
    private String player;
    
    private int totalScore;

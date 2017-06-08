@@ -22,6 +22,8 @@ public class BallAttack {
 					//add the user with score of 150 to the leaderboard as a default entry
 					ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("leaderboard.dat"));
    				out.writeObject(user);
+               //flus makes sure we won't lose any data when we close the output stream. it flushes stuff out of the buffer
+               //we probably dont need it, but just to be safe...
    				out.flush();
    				out.close();
 				}

@@ -1,10 +1,12 @@
 import java.awt.Color;
 public abstract class Item extends Coordinate{
-	//width, height, and color (x and y are stored in coordinate
+
+	//width, height, and color (x and y are stored in coordinate class)
 	private int height;
 	private int width;
 	private Color color;
 	
+   //default constructer
 	public Item(int x, int y, int w, int h, Color c) {	
 		super(x, y);
 		height = h;
@@ -12,6 +14,7 @@ public abstract class Item extends Coordinate{
 		color = c;
 	}
 	
+   //getters and setters
 	public int getHeight() {
 		return height;
 	}
